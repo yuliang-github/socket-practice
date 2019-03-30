@@ -48,7 +48,7 @@ public class Server {
                         longAdder.increment();
                         printStream.println("第" + longAdder.intValue() + "次给你响应");
                     }
-                    System.err.println("接收到的客户端数据:" + getInfo);
+                    System.err.println("接收到的客户端:"+socket.getPort()+"的数据:" + getInfo);
                 }while (flag);
 
             }catch (Exception e){

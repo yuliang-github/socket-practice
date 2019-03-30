@@ -31,31 +31,22 @@ public class Client {
     }
 
     private static void send(Socket client) throws Exception{
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        PrintStream printStream = new PrintStream(client.getOutputStream());
+        BufferedReader print = new BufferedReader(new InputStreamReader(System.in));
+        PrintStream request = new PrintStream(client.getOutputStream());
         // 得到socket输出流
-
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+        BufferedReader response = new BufferedReader(new InputStreamReader(client.getInputStream()));
         boolean flag = true;
         do {
             // 获取键盘输入内容
-            String sendInfo = input.readLine();
+            String sendInfo = print.readLine();
             // 发送数据
-            printStream.println(sendInfo);
+            request.println(sendInfo);
             // 获取服务端响应数据
-            InputStream socketInput = client.getInputStream();
-//            byte[] bytes = new byte[1024];
-//            StringBuilder sb = new StringBuilder("服务端响应数据:");
-//            int len = 0;
-//            while ((len = socketInput.read(bytes)) > 0){
-//                sb.append(new String(bytes,0,len));
-//            }
-            String res = bufferedReader.readLine();
+            String res = response.readLine();
             if("bye".equalsIgnoreCase(res)){
                 flag = false;
-            }else{
-                System.err.println(res);
             }
+            System.err.println(res);
         }while (flag);
 
     }
