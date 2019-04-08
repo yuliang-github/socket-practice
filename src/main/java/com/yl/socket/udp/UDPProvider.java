@@ -18,24 +18,24 @@ public class UDPProvider {
 
         // 构建接收实体
         final byte[] buf = new byte[512];
-        DatagramPacket recievePack = new DatagramPacket(buf, buf.length);
+        DatagramPacket receivePack = new DatagramPacket(buf, buf.length);
 
         // 接收消息
-        ds.receive(recievePack);
+        ds.receive(receivePack);
 
         // 获取发送者的ip、port
-        String hostAddress = recievePack.getAddress().getHostAddress();
-        int port = recievePack.getPort();
+        String hostAddress = receivePack.getAddress().getHostAddress();
+        int port = receivePack.getPort();
 
         // 接收消息
-        String data  = new String(recievePack.getData(), 0, recievePack.getLength());
+        String data  = new String(receivePack.getData(), 0, receivePack.getLength());
         System.err.println("UDPProvider recieve from ip:" + hostAddress + ",port:" +
             port + ",data:" + data);
 
         // 回写数据
-        String responseData = "Receive data with len:" + recievePack.getLength();
+        String responseData = "Receive data with len:" + receivePack.getLength();
         DatagramPacket responsePack = new DatagramPacket(responseData.getBytes(), responseData.getBytes().length
-            , recievePack.getAddress(), recievePack.getPort());
+            , receivePack.getAddress(), receivePack.getPort());
         ds.send(responsePack);
 
         System.err.println("UDPProvider Finished...");
@@ -72,15 +72,15 @@ public class UDPProvider {
                 ds = new DatagramSocket(20000);
                 while (!done){
                     final byte[] buf = new byte[512];
-                    DatagramPacket recievePack = new DatagramPacket(buf, buf.length);
+                    DatagramPacket receivePack = new DatagramPacket(buf, buf.length);
 
                     // 接收消息
-                    ds.receive(recievePack);
+                    ds.receive(receivePack);
 
                     // 接收消息
-                    String data  = new String(recievePack.getData(), 0, recievePack.getLength());
-                    System.err.println("UDPProvider recieve from ip:" + recievePack.getAddress() + ",port:" +
-                        recievePack.getPort() + ",data:" + data);
+                    String data  = new String(receivePack.getData(), 0, receivePack.getLength());
+                    System.err.println("UDPProvider receive from ip:" + receivePack.getAddress() + ",port:" +
+                        receivePack.getPort() + ",data:" + data);
 
                     // 解析回电端口
                     int port = MessageCreator.parsePort(data);
@@ -88,7 +88,7 @@ public class UDPProvider {
                         // 回写数据
                         String responseData = MessageCreator.buildWithSn(sn);
                         DatagramPacket responsePack = new DatagramPacket(responseData.getBytes(), responseData.getBytes().length
-                            , recievePack.getAddress(), port);
+                            , receivePack.getAddress(), port);
                         ds.send(responsePack);
                     }
                 }

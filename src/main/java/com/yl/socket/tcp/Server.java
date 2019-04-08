@@ -1,4 +1,4 @@
-package com.yl.socket.bio;
+package com.yl.socket.tcp;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -20,7 +20,7 @@ public class Server {
 
         // 接收连接
         for(;;){
-            new SocketHandler(server.accept()).start();
+            SocketHandler.hand(server.accept());
         }
     }
 
@@ -28,9 +28,14 @@ public class Server {
         private Socket socket;
         private boolean flag = true;
         private LongAdder longAdder = new LongAdder();
-        public SocketHandler(Socket socket){
+        private SocketHandler(Socket socket){
             this.socket = socket;
         }
+
+        public static void hand(Socket socket){
+            new SocketHandler(socket).start();
+        }
+
         @Override
         public void run() {
             System.err.println("接收到连接:" + socket.getInetAddress()+",P:" + socket.getPort());

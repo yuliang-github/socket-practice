@@ -133,15 +133,15 @@ public class UDPSearcher {
                 latch.countDown();
                 while (!done){
                     final byte[] buf = new byte[512];
-                    DatagramPacket recievePack = new DatagramPacket(buf, buf.length);
+                    DatagramPacket receivePack = new DatagramPacket(buf, buf.length);
                     // 接收消息
-                    ds.receive(recievePack);
+                    ds.receive(receivePack);
                     // 获取发送者的ip、port
-                    String hostAddress = recievePack.getAddress().getHostAddress();
-                    int port = recievePack.getPort();
+                    String hostAddress = receivePack.getAddress().getHostAddress();
+                    int port = receivePack.getPort();
                     // 接收消息
-                    String data  = new String(recievePack.getData(), 0, recievePack.getLength());
-                    System.err.println("UDPSearcher recieve from ip:" + hostAddress + ",port:" +
+                    String data  = new String(receivePack.getData(), 0, receivePack.getLength());
+                    System.err.println("UDPSearcher receive from ip:" + hostAddress + ",port:" +
                         port + ",data:" + data);
 
                     String sn = MessageCreator.parseSn(data);
