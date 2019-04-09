@@ -1,7 +1,7 @@
-package java.lang;
+package com.yl.test;
 
 
-import com.yl.test.DemoClass;
+import org.junit.Test;
 
 import java.io.InputStream;
 
@@ -36,9 +36,25 @@ public class ClassLoaderDemo {
             }
         };
 
-        Class<?> clazz = loader.loadClass("java.lang.Demo");
+        Class<?> clazz = loader.loadClass("com.yl.test.ClassLoaderDemo");
 
         System.err.println(clazz.newInstance() instanceof DemoClass);
+
+        System.err.println(ClassLoader.getSystemResource("/").getPath());
     }
 
+    @Test
+    public void demo(){
+
+        String path = ClassLoaderDemo.class.getResource("/").toString();
+        System.err.println(path);
+
+        String path2 = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+        System.out.println("path2 = " + path2);
+
+        String path3 = Object.class.getResource("Object.class").getPath();
+
+        System.err.println("path3=" + path3);
+
+    }
 }
