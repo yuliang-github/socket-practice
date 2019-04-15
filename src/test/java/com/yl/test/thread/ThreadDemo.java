@@ -14,8 +14,8 @@ public class ThreadDemo {
 
     public static void main(String[] args) throws Exception{
 
-        Thread t = new Thread(() -> {
-            System.err.println("子线程进来了");
+        Thread t1 = new Thread(() -> {
+            System.err.println("t1子线程进来了");
             int i = 0;
             LockSupport.park();
             while (true){
@@ -25,18 +25,38 @@ public class ThreadDemo {
                 }
                 System.err.println(Thread.currentThread().isInterrupted());
                 if(Thread.currentThread().isInterrupted()){
+                    System.err.println("t1子线程出来了");
+                    return;
+                }
+            }
+        });
+
+        Thread t2 = new Thread(() -> {
+            System.err.println("t2子线程进来了");
+            int i = 0;
+            LockSupport.park();
+            while (true){
+                System.err.println(i++);
+                if(i > 10){
+                    Thread.currentThread().interrupt();
+                }
+                System.err.println(Thread.currentThread().isInterrupted());
+                if(Thread.currentThread().isInterrupted()){
+                    System.err.println("t2子线程出来了");
                     return;
                 }
             }
 
         });
 
-        t.start();
-
+        t1.start();
+        t2.start();
         Thread.sleep(5*1000);
         System.err.println("主线程休眠结束");
-        LockSupport.unpark(t);
-        t.join();
+        LockSupport.unpark(t1);
+        LockSupport.unpark(t2);
+        t1.join();
+        t2.join();
     }
 
 }
