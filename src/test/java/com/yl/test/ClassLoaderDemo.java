@@ -4,6 +4,9 @@ package com.yl.test;
 import org.junit.Test;
 
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author Alex
@@ -44,7 +47,7 @@ public class ClassLoaderDemo {
     }
 
     @Test
-    public void demo(){
+    public void demo()throws Exception{
 
         String path = ClassLoaderDemo.class.getResource("/").toString();
         System.err.println(path);
@@ -55,6 +58,11 @@ public class ClassLoaderDemo {
         String path3 = Object.class.getResource("Object.class").getPath();
 
         System.err.println("path3=" + path3);
+
+        Lock lock = new ReentrantLock();
+        lock.lock();
+        lock.unlock();
+        lock.tryLock(100, TimeUnit.SECONDS);
 
     }
 }
