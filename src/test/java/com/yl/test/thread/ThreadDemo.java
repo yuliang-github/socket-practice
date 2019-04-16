@@ -1,5 +1,7 @@
 package com.yl.test.thread;
 
+import org.junit.Test;
+
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
@@ -57,6 +59,16 @@ public class ThreadDemo {
         LockSupport.unpark(t2);
         t1.join();
         t2.join();
+    }
+
+    @Test
+    public void demo()throws Exception{
+
+        String s1 = new String("你好".getBytes("UTF-8"),"GBK");
+
+        String s2 = new String(s1.getBytes("GBK"),"UTF-8");
+
+        System.err.println(s2);
     }
 
 }
