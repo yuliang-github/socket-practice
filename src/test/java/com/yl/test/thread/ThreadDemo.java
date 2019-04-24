@@ -21,7 +21,7 @@ public class ThreadDemo {
             int i = 0;
             LockSupport.park();
             while (true){
-                System.err.println(i++);
+                System.err.println("t1:" + i++);
                 if(i > 10){
                     Thread.currentThread().interrupt();
                 }
@@ -38,7 +38,7 @@ public class ThreadDemo {
             int i = 0;
             LockSupport.park();
             while (true){
-                System.err.println(i++);
+                System.err.println("t2:" + i++);
                 if(i > 10){
                     Thread.currentThread().interrupt();
                 }
@@ -69,6 +69,18 @@ public class ThreadDemo {
         String s2 = new String(s1.getBytes("GBK"),"UTF-8");
 
         System.err.println(s2);
+
+        System.err.println(1 << 2);
     }
 
+    @Test
+    public void demo_1(){
+
+        byte[] bytes = new byte[10];
+
+        byte b1 = bytes[1];
+
+        System.err.println(bytes[1]);
+
+    }
 }
