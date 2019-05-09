@@ -3,10 +3,7 @@ package com.yl.test.thread;
 import com.google.common.collect.Lists;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
@@ -125,17 +122,18 @@ public class ThreadDemo {
     @Test
     public void demo_4(){
 
-        try {
+        String s = "余";
 
-            try {
-                int i = 1/0;
-            }catch (Exception e){
-                System.err.println("里面catch");
-            }
+        byte[] bytes = s.getBytes();
 
-        }catch (Exception e){
-            System.err.println("外面catch");
-        }
+        System.err.println(bytes);
 
+        System.err.println(Base64.getEncoder().encodeToString(s.getBytes()));
+    }
+
+    @Test
+    public void demo_5(){
+        String property = System.getProperty("line.separator");
+        System.err.println("-"+property+"-");
     }
 }
