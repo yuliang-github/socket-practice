@@ -68,7 +68,8 @@ public class ProductServer {
                                 ProductRequest request = (ProductRequest) msg;
                                 System.err.println("ProductServer 收到商品订单:[" + request + "],开始处理...");
 
-                                ctx.writeAndFlush(new ProductResponse(0, random.nextInt(), request.getUserName()+ "您好,下单成功。"));
+                                ctx.writeAndFlush(new ProductResponse(0, random.nextInt(),
+                                    request.getUserName()+ "您好,下单成功。"));
                             }
 
                             @Override
