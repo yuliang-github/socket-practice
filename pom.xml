@@ -58,6 +58,19 @@
             <version>1.2.4</version>
         </dependency>
 
+        <!--记住千万要把这两个包一起导进来,不然无法编/解码-->
+        <dependency>
+            <groupId>org.jboss.marshalling</groupId>
+            <artifactId>jboss-marshalling</artifactId>
+            <version>2.0.7.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.marshalling</groupId>
+            <artifactId>jboss-marshalling-serial</artifactId>
+            <version>2.0.7.Final</version>
+        </dependency>
+
+
     </dependencies>
 
 
