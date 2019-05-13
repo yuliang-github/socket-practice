@@ -1,8 +1,11 @@
 package com.yl.test.thread;
 
 import com.google.common.collect.Lists;
+import com.yl.test.Animal;
 import org.junit.Test;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.LockSupport;
@@ -135,5 +138,26 @@ public class ThreadDemo {
     public void demo_5(){
         String property = System.getProperty("line.separator");
         System.err.println("-"+property+"-");
+        System.err.println(new String(Base64.getDecoder().decode("6JCd5Y2c5ZCb")));
+    }
+
+    @Test
+    public void demo_6(){
+        Class<Animal> clazz = Animal.class;
+
+        Method[] methods = clazz.getDeclaredMethods();
+
+        for (Method method : methods) {
+            String name = method.getName();
+            if(name.equalsIgnoreCase("say")){
+                Parameter[] parameters = method.getParameters();
+                for (Parameter parameter : parameters) {
+                    System.err.println(parameter.getName());
+                }
+            }
+        }
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> System.err.println("程序退出了。。。。")));
+
     }
 }

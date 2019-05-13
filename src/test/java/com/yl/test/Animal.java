@@ -17,5 +17,8 @@ public class Animal {
 
     private int age;
 
+    public String say(Dog dog,String age){
+        return "I am " + dog + ",age of " + age;
+    }
 
 }
