@@ -160,4 +160,29 @@ public class ThreadDemo {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> System.err.println("程序退出了。。。。")));
 
     }
+
+    @Test
+    public void demo_7(){
+        String b = "ab";
+        String c = "c";
+        String d = b + c;
+        String e = "a" + "b" + "c";
+        /*
+            String累的创建方式:
+                1.String a = "abc",先在字符串常量池中查找是否有'abc'这个常量,如果有,直接将引用赋值给a
+                  ,若没有则先创建字符串对象,再将对象放入常量池,然后将常量池中的引用赋值给a
+                2.String a = new String("abc"),直接在堆中创建对象
+            输出false,因为在java中字符串相加(+)底层是通过StringBuilder来完成的,然后再通过toString()
+            方法来转换成字符串,生成的对象放在堆中
+         */
+
+        String a = "abc";
+        System.err.println(a == d);
+        /*
+            输出true,String e = "a" + "b" + "c" 因为jvm的常量优化机制,因为'a'、'b'、'c'都是常量,所以系统
+            会直接生成常量'abc'并赋值给e
+         */
+        System.err.println(a == e);
+
+    }
 }
