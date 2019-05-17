@@ -184,9 +184,5 @@ public class ThreadDemo {
          */
         System.err.println(a == e);
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(".");
-        StringBuffer sbf = new StringBuffer();
-        sbf.append(".");
     }
 }
