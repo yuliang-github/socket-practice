@@ -2,6 +2,8 @@ package com.yl.test;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.Base64;
+
 /**
  * @author Alex
  * @since 2019/4/8 15:01
@@ -23,5 +25,7 @@ public class DemoClass {
         JSONObject json = (JSONObject)JSONObject.toJSON(dog);
 
         System.err.println(json);
+
+        System.err.println(new String(Base64.getDecoder().decode("IOKRpQ==")));
     }
 }
