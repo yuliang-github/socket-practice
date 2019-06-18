@@ -11,7 +11,10 @@ import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Alex
@@ -19,6 +22,8 @@ import java.util.Random;
  */
 @Slf4j
 public class ProductClient {
+
+    protected static List<Channel> channels = new CopyOnWriteArrayList<>();
 
     public static void main(String[] args) {
         connect("127.0.0.1", 9091);
@@ -52,12 +57,13 @@ public class ProductClient {
                         ch.pipeline().addLast(new ChannelInboundHandlerAdapter(){
                             @Override
                             public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                                Random random = new Random();
-                                for(int i=0;i<10;i++){
-                                    ctx.write(new ProductRequest(random.nextInt(), "春树", "龙猫公仔"));
-                                }
-                                // 统一发送
-                                ctx.flush();
+//                                Random random = new Random();
+//                                for(int i=0;i<10;i++){
+//                                    ctx.write(new ProductRequest(random.nextInt(), "春树", "龙猫公仔"));
+//                                }
+//                                // 统一发送
+//                                ctx.flush();
+                                channels.add(ctx.channel());
                             }
 
                             @Override
@@ -69,6 +75,7 @@ public class ProductClient {
                             @Override
                             public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
                                 log.error("client connect error", cause);
+                                channels.remove(ctx.channel());
                                 ctx.close();
                             }
                         });
@@ -77,6 +84,15 @@ public class ProductClient {
                 });
 
             ChannelFuture future = b.connect(host, port).sync();
+
+            Scanner scanner = new Scanner(System.in);
+            Random random = new Random();
+            String line = null;
+            while(!(line = scanner.nextLine()).equals("exit")){
+                for (Channel channel : channels) {
+                    channel.writeAndFlush(new ProductRequest(random.nextInt(), "春树", line));
+                }
+            }
             future.channel().closeFuture().sync();
 
         }catch (Exception e){
