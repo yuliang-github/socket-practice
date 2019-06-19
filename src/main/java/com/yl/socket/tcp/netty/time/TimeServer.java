@@ -1,5 +1,6 @@
 package com.yl.socket.tcp.netty.time;
 
+import com.yl.socket.tcp.netty.Product.ProductRequest;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -11,6 +12,9 @@ import io.netty.handler.codec.LineBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Alex
@@ -41,6 +45,7 @@ public class TimeServer {
         start(9091);
     }
 
+    protected static List<Channel> channels = new CopyOnWriteArrayList<>();
     public static void start(int port){
         EventLoopGroup boss = null;
         EventLoopGroup worker = null;
@@ -58,6 +63,13 @@ public class TimeServer {
                         socketChannel.pipeline().addLast(new LineBasedFrameDecoder(1024));
                         socketChannel.pipeline().addLast(new ChannelInboundHandlerAdapter(){
                             int counter = 0;
+
+                            @Override
+                            public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+                                channels.add(ctx.channel());
+                            }
+
+                            //
                             @Override
                             public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                                 ByteBuf buf = (ByteBuf)msg;
@@ -66,14 +78,15 @@ public class TimeServer {
                                 String body = new String(bytes,"UTF-8")
                                     .substring(0, bytes.length - System.getProperty("line.separator").length()+1);
                                 System.err.println("server receive msg[" + body + "]; counter is[" + (++counter) + "]。");
-                                String response = "query time".equalsIgnoreCase(body)?new Date().toString()  :"bad request";
-                                response += System.getProperty("line.separator");
-                                ctx.writeAndFlush(Unpooled.copiedBuffer(response.getBytes()));
+                               // String response = "query time".equalsIgnoreCase(body)?new Date().toString()  :"bad request";
+                                //response += System.getProperty("line.separator");
+                                //ctx.writeAndFlush(Unpooled.copiedBuffer(response.getBytes()));
                             }
 
                             @Override
                             public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
                                 log.error("server connect error", cause);
+                                channels.remove(ctx.channel());
                                 ctx.close();
                             }
                         });
@@ -81,6 +94,14 @@ public class TimeServer {
                 });
 
             ChannelFuture future = sb.bind(port).sync();
+            Scanner scanner = new Scanner(System.in);
+            String line = null;
+            while(!(line = scanner.nextLine()).equals("exit")){
+                for (Channel channel : channels) {
+                    channel.writeAndFlush(line.getBytes());
+                }
+            }
+
             future.channel().closeFuture().sync();
         }catch (Exception e){
             log.error("Exception occurred", e);
